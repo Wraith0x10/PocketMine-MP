@@ -25,6 +25,7 @@ namespace pocketmine\block;
 
 use pocketmine\block\tile\Barrel as TileBarrel;
 use pocketmine\block\utils\AnyFacingTrait;
+use pocketmine\block\utils\Fallable;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\item\Item;
 use pocketmine\math\Facing;
@@ -82,6 +83,11 @@ class Barrel extends Opaque{
 				}
 
 				$player->setCurrentWindow($barrel->getInventory());
+				$block = $barrel->getBlock();
+				$underBlock = $block->getPosition()->getWorld()->getBlock($block->getPosition()->subtract(0,1, 0));
+				if($underBlock instanceof Fallable){
+					$underBlock->onNearbyBlockChange();
+				}
 			}
 		}
 

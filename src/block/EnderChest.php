@@ -26,6 +26,7 @@ namespace pocketmine\block;
 use pocketmine\block\inventory\EnderChestInventory;
 use pocketmine\block\tile\EnderChest as TileEnderChest;
 use pocketmine\block\utils\FacesOppositePlacingPlayerTrait;
+use pocketmine\block\utils\Fallable;
 use pocketmine\block\utils\SupportType;
 use pocketmine\item\Item;
 use pocketmine\math\AxisAlignedBB;
@@ -58,6 +59,11 @@ class EnderChest extends Transparent{
 			if($enderChest instanceof TileEnderChest && $this->getSide(Facing::UP)->isTransparent()){
 				$enderChest->setViewerCount($enderChest->getViewerCount() + 1);
 				$player->setCurrentWindow(new EnderChestInventory($this->position, $player->getEnderInventory()));
+				$block = $enderChest->getBlock();
+				$underBlock = $block->getPosition()->getWorld()->getBlock($block->getPosition()->subtract(0,1, 0));
+				if($underBlock instanceof Fallable){
+					$underBlock->onNearbyBlockChange();
+				}
 			}
 		}
 

@@ -25,6 +25,7 @@ namespace pocketmine\block;
 
 use pocketmine\block\tile\Chest as TileChest;
 use pocketmine\block\utils\FacesOppositePlacingPlayerTrait;
+use pocketmine\block\utils\Fallable;
 use pocketmine\block\utils\SupportType;
 use pocketmine\event\block\ChestPairEvent;
 use pocketmine\item\Item;
@@ -86,6 +87,11 @@ class Chest extends Transparent{
 				}
 
 				$player->setCurrentWindow($chest->getInventory());
+				$block = $chest->getBlock();
+				$underBlock = $block->getPosition()->getWorld()->getBlock($block->getPosition()->subtract(0,1, 0));
+				if($underBlock instanceof Fallable){
+					$underBlock->onNearbyBlockChange();
+				}
 			}
 		}
 
